@@ -1,4 +1,4 @@
-import Stepper from "../Stepper/Stepper";
+//import Stepper from "../Stepper/Stepper";
 /**
  * Компонент карточка.
  * @param {object} props - Свойства компонента.
@@ -26,22 +26,28 @@ export const Card = (props) => {
     isFavorite,
   } = props.details;
 
-  const { onBtnClick, onStepperUpdate, onToggleFavorite } = props;
+  const { onCardClick, onToggleFavorite } = props;
 
   // Обработчик клика по карточке для передачи id в компонент родитель
-  const handleBtnClick = () => onBtnClick(id);
+  const handleCardClick = () => onCardClick(id);
 
   // Обработчик клика на иконку сердечка
-  const handleFavorite = () => onToggleFavorite(id);
-
-  // Обработчик обновления значения в Stepper
-  const handleQuantityUpdate = (value) => {
-    // value будет получен в момент изменения значения в компоненте Stepper
-    onStepperUpdate(id, value);
+  const handleFavorite = (event) => {
+    event.stopPropagation(); // Предотвр. всплытие события
+    onToggleFavorite(id);
   };
 
+  // Обработчик обновления значения в Stepper
+  //const handleQuantityUpdate = (value) => {
+    // value будет получен в момент изменения значения в компоненте Stepper
+  //  onStepperUpdate(id, value);
+  //};
+
   return (
-    <div className="max-w-sm md:max-w-sm lg:max-w-sm rounded-md overflow-hidden shadow-md hover:shadow-lg mb-8">
+    <div
+      onClick={handleCardClick}
+      className="max-w-sm md:max-w-sm lg:max-w-sm rounded-md overflow-hidden shadow-md hover:shadow-lg mb-8 cursor-pointer"
+    >
       <div className="relative">
         <img className="w-full max-h-44" src={imgSrc} alt={title} />
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30 transition-opacity duration-300 hover:opacity-50"></div>
@@ -53,7 +59,7 @@ export const Card = (props) => {
 
         <button
           onClick={handleFavorite}
-          className={`absolute top-0 left-0 m-2 p-2 rounded-full ${
+          className={`absolute top-0 left-0 m-2 p-2 rounded-full z-10 ${
             isFavorite ? "text-red-500" : "text-white"
           }`}
         >
@@ -78,21 +84,8 @@ export const Card = (props) => {
               "☆".repeat(5 - Math.floor(rating))}
           </div>
         )}
-
-        <Stepper
-          onQuantityUpdate={handleQuantityUpdate}
-          minValue={1}
-          maxValue={10}
-        />
-
         <div className="flex items-center justify-between">
           <span className="font-bold text-lg">{price}$</span>
-          <button
-            onClick={handleBtnClick}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-          >
-            Buy Now
-          </button>
         </div>
       </div>
     </div>
