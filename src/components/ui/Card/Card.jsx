@@ -1,4 +1,3 @@
-//import Stepper from "../Stepper/Stepper";
 /**
  * Компонент карточка.
  * @param {object} props - Свойства компонента.
@@ -11,7 +10,7 @@
  * @param {number} [props.details.rating] - Рейтинг карточки (необязательно).
  * @param {string} props.details.imgSrc - Путь к изображению.
  * @param {function} props.onClick - Обработчик клика по карточке (необязательно).
- * @param {function} props.onStepperUpdate - Обработчик клика по Stepper.
+ * @param {boolean} props.isFavorite - Карточка добавлена в сохраненки или нет (необязательно).
  * @returns {JSX.Element} Элемент JSX.
  */
 export const Card = (props) => {
@@ -28,39 +27,29 @@ export const Card = (props) => {
 
   const { onCardClick, onToggleFavorite } = props;
 
-  // Обработчик клика по карточке для передачи id в компонент родитель
-  const handleCardClick = () => onCardClick(id);
-
   // Обработчик клика на иконку сердечка
   const handleFavorite = (event) => {
     event.stopPropagation(); // Предотвр. всплытие события
     onToggleFavorite(id);
   };
 
-  // Обработчик обновления значения в Stepper
-  //const handleQuantityUpdate = (value) => {
-    // value будет получен в момент изменения значения в компоненте Stepper
-  //  onStepperUpdate(id, value);
-  //};
-
   return (
     <div
-      onClick={handleCardClick}
+      onClick={() => onCardClick(id)}
       className="max-w-sm md:max-w-sm lg:max-w-sm rounded-md overflow-hidden shadow-md hover:shadow-lg mb-8 cursor-pointer"
     >
       <div className="relative">
         <img className="w-full max-h-44" src={imgSrc} alt={title} />
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30 transition-opacity duration-300 hover:opacity-50"></div>
         {price && (
-          <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 m-2 rounded-md text-sm font-medium">
+          <div className="absolute top-0 right-0 bg-indigo-500 text-white px-2 py-1 m-2 rounded-md text-sm font-normal">
             SALE
           </div>
         )}
-
         <button
           onClick={handleFavorite}
-          className={`absolute top-0 left-0 m-2 p-2 rounded-full z-10 ${
-            isFavorite ? "text-red-500" : "text-white"
+          className={`absolute top-0 left-0 m-2 p-2 rounded-full z-0 ${
+            isFavorite ? "text-indigo-500" : "text-white"
           }`}
         >
           <svg
